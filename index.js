@@ -1,7 +1,7 @@
 
 //initial variables for creating the suits and values of those suits
 let suits = ['Spade', 'Club', 'Heart', 'Diamonds'];
-let values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A'];
+let values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King', 'Ace'];
 
 
 //creating the Card class to be able to have methods that identify the above listed suits and values as their designations
@@ -64,34 +64,44 @@ class GameOfWar {
             case '8': return 8;
             case '9': return 9;
             case '10': return 10;
-            case 'J': return 11;
-            case 'Q': return 12;
-            case 'K': return 13;
-            case 'A': return 14;
+            case 'Jack': return 11;
+            case 'Queen': return 12;
+            case 'King': return 13;
+            case 'Ace': return 14;
             default: return 0;
         }
     }
 
-    //method to start the game itself, initializing each player's score as 0 and then using the shift method to take the first card from each player's hand and show it. uses conditional logic to compare the card value and awarding a point to whichever player had the higher valued card, or no points if the card values are tied.
+    //method to start the game itself, initializing each player's score as 0 and then using the shift method to take the first card from each player's hand and show it. uses conditional logic to compare the card value and awarding a point to whichever player had the higher valued card, or no points if the card values are tied. loops and draws cards until deck is empty.
     startGame() {
         let p1Score = 0;
         let p2Score = 0;
+        let deckEmpty = false;
 
+        while (!deckEmpty) {
             let card1 = this.players[0].hand.shift();
             let card2 = this.players[1].hand.shift();
 
             if (this.checkRanks(card1) > this.checkRanks(card2)) {
                 p1Score++;
-                console.log(`${this.players[0].name} wins with ${card1.value} of ${card1.suit}`);
-            } else if (this.checkRanks(card1) < this.checkRanks(card2)) {
+
+                console.log(`${this.players[0].name} wins the round with ${card1.value} of ${card1.suit}`);
+            } 
+            else if (this.checkRanks(card1) < this.checkRanks(card2)) {
                 p2Score++;
-                console.log(`${this.players[1].name} wins with ${card2.value} of ${card2.suit}`);
-            } else {
-                console.log(`This round is a tie. ${this.players[0].name} had ${card1.value} of ${card1.suit} and ${this.players[1].name} had ${card2.value} of ${card2.suit}`);
+
+                console.log(`${this.players[1].name} wins the round with ${card2.value} of ${card2.suit}`);
+            } 
+            else {
+                console.log(`Tied round. ${this.players[0].name} had ${card1.value} of ${card1.suit} and ${this.players[1].name} had ${card2.value} of ${card2.suit}`);
+            }
+
+            if (this.players[0].hand.length === 0 || this.players[1].hand.length === 0){
+                deckEmpty = true;
             }
         }
 
-        //uses conditional logic to compare player scores and declaring a winner
+        //uses conditional logic to compare player scores and declare a winner after breaking out of the previous loop
         if (p1Score > p2Score) {
             console.log(`${this.players[0].name} wins the game with ${p1Score} points!`);
         } else if (p1Score < p2Score) {
@@ -101,5 +111,9 @@ class GameOfWar {
         }
         console.log(`${this.players[0].name} Score: ${p1Score}`);
         console.log(`${this.players[1].name} Score: ${p2Score}`);
+        }
+
     }
-}
+
+let game = new GameOfWar();
+game.startGame();
